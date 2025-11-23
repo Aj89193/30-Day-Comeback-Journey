@@ -1,0 +1,43 @@
+React: useState vs useRef
+useState: Creates state that triggers re-renders when updated. Use for data that affects what the user sees (form inputs, toggles, counters, UI state).
+
+const [count, setCount] = useState(0); // Re-renders when count changes
+useRef: Creates a mutable reference that persists across renders but does NOT trigger re-renders when changed. Use for accessing DOM elements directly, storing timers/intervals, or tracking previous values without causing re-renders.
+
+const inputRef = useRef(null); // No re-render when .current changes
+inputRef.current.focus(); // Direct DOM manipulation
+When to use each:
+
+useState: Updating text, showing/hiding elements, form data, anything visible
+useRef: DOM access, storing interval IDs, tracking render count, caching values
+
+
+Node/Express: Middleware
+What is middleware: Functions that execute during the request-response cycle, having access to req, res, and next(). They can modify request/response objects, end the request, or pass control to the next middleware.
+
+Two examples:
+
+Authentication middleware: Verifies user tokens before allowing access to protected routes
+
+function authMiddleware(req, res, next) {
+  if (!req.headers.authorization) return res.status(401).json({error: 'Unauthorized'});
+  next(); // Pass to next middleware/route
+}
+
+Logging middleware: Records request details for debugging/monitoring
+
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url} - ${new Date()}`);
+  next();
+});
+
+SQL: INNER JOIN vs LEFT JOIN
+INNER JOIN: Returns only rows where there's a match in BOTH tables. If no match exists, the row is excluded entirely.
+
+SELECT * FROM orders INNER JOIN customers ON orders.customer_id = customers.id;
+-- Only returns orders that have a matching customer
+LEFT JOIN: Returns ALL rows from the left table, plus matching rows from the right table. If no match exists, right table columns are NULL.
+
+SELECT * FROM customers LEFT JOIN orders ON customers.id = orders.customer_id;
+-- Returns all customers, even those with no orders (orders columns = NULL)
+Key difference: INNER JOIN = intersection (only matches), LEFT JOIN = all from left + matches from right.RetryClaude can make mistakes. Please double-check responses.
