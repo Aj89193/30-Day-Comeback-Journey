@@ -1,0 +1,94 @@
+console.log(1);
+setTimeout(() => console.log(2), 0);
+Promise.resolve().then(() => console.log(3));
+console.log(4);
+
+---
+
+✅ Output
+1
+4
+3
+2
+
+✅ Event Loop Explanation
+
+JavaScript executes code in this order:
+
+1. Synchronous code → Call Stack
+
+Runs immediately, line by line.
+
+2. Microtasks → Promise callbacks
+
+Executed right after synchronous code, before timers.
+
+3. Macrotasks → setTimeout, setInterval, I/O
+
+Executed after all microtasks are finished.
+
+Now apply this to your code:
+Step 1: Synchronous code
+console.log(1);  → prints 1
+console.log(4);  → prints 4
+
+Step 2: Promise Microtask
+Promise.resolve().then(() => console.log(3)); → prints 3
+
+Step 3: setTimeout Macrotask
+setTimeout(..., 0); → prints 2
+
+✅ Why Promise logs before setTimeout?
+
+Because:
+
+🔹 Promise callbacks go into the "Microtask Queue"
+🔹 setTimeout goes into the "Macrotask Queue"
+
+The event loop always empties the Microtask Queue FIRST, even if the timer is 0ms.
+
+So the order becomes:
+
+Synchronous logs → 1, 4
+
+Promise microtask → 3
+
+Timeout macrotask → 2
+
+✔ That’s why 3 comes before 2.
+
+
+┌───────────────────────────────────────────┐
+│              CALL STACK                   │
+├───────────────────────────────────────────┤
+│ console.log(1)     → runs immediately     │
+│ setTimeout(...)    → sends to Macrotask   │
+│ Promise.then(...)  → sends to Microtask   │
+│ console.log(4)     → runs immediately     │
+└───────────────────────────────────────────┘
+                │
+                ▼
+
+        ┌───────────────────────────────┐
+        │       EVENT LOOP              │
+        └───────────────────────────────┘
+                │
+        Checks Microtask Queue FIRST
+                │
+                ▼
+
+┌───────────────────────────────────────────┐
+│          MICROTASK QUEUE (FAST)           │
+├───────────────────────────────────────────┤
+│   Promise.then → console.log(3)           │
+└───────────────────────────────────────────┘
+                │
+                ▼
+
+(After microtasks are empty…)
+
+┌───────────────────────────────────────────┐
+│         MACROTASK QUEUE (SLOWER)          │
+├───────────────────────────────────────────┤
+│ setTimeout(0ms) → console.log(2)          │
+└───────────────────────────────────────────┘

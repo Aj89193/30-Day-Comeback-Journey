@@ -1,0 +1,10 @@
+Load Balancing
+Meaning: Load balancing is the process of distributing incoming network traffic or computational workload across multiple servers to ensure no single server becomes overwhelmed.
+Why needed: It prevents server overload, improves application responsiveness, maximizes throughput, ensures high availability, and provides redundancy so if one server fails, others can handle the traffic seamlessly.
+Three main types:
+
+Round Robin - Distributes requests sequentially to each server in rotation, treating all servers equally
+Least Connections - Routes traffic to the server with the fewest active connections, ideal for varying request lengths
+IP Hash - Uses the client's IP address to determine which server receives the request, ensuring the same client always connects to the same server for session persistence
+
+Real industry example: Netflix uses sophisticated load balancing with AWS Elastic Load Balancing to distribute millions of streaming requests across thousands of servers worldwide, ensuring smooth playback even during peak hours when entire regions are watching popular shows simultaneously, while automatically routing around failed servers without users noticing any interruption.Retry
